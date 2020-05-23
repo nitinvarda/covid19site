@@ -1,0 +1,40 @@
+/*helpline*/
+#helpline-heading{
+    text-align: center;
+    padding-top : 70px;
+}
+#helpline{
+    margin-left: 250px;
+    margin-right: 250px;
+    /*border:1px solid black;*/
+    line-height: 30px;
+}
+#helpline-heading{
+    text-align: center;
+}
+@media screen and (max-width: 600px){
+    #helpline{
+        margin-left: 20px;
+        margin-right: -150px;
+        /*border:1px solid black;*/
+        line-height: 30px;
+        /*display: flex;
+        justify-content: space-around;
+        margin-right: 0px;*/
+
+    }
+    #helpline-state{
+        list-style-type: none;
+        /*margin-left: -30px;*/
+        /* background-color: blue; */
+    }
+   
+    #helpline-heading{
+        padding-top:65px; 
+        padding-bottom: 20px;
+        text-align: center;
+    }
+    #helpline-heading{
+        text-align: center;
+    }
+}

@@ -1,0 +1,43 @@
+#tot-cases-heading{
+    text-align: center;
+    /* margin-left: 127px; */
+}
+#state-table-heading{
+    text-align: center;
+    /* margin-left: 127px; */
+
+}
+#district-info{
+    text-align: center;
+    margin-left: 138px;
+
+}
+
+
+@media screen and (max-width: 600px){
+    #total-cases{
+        margin-left: 78px;
+        
+        
+    }
+    
+    #state-table{
+        margin-right: 10px;
+    }
+    #tot-cases-heading{
+        text-align: center;
+        margin-left: 91px;
+        margin-right: -61px ;
+        /* background-color: blue; */
+        
+    }
+    #state-table-heading{
+        margin-left: 124px;
+        margin-right: -40px;
+
+    }
+    #district-info{
+        margin-left: 84px;
+
+    }
+}
