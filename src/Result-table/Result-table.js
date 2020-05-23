@@ -113,7 +113,14 @@ class Tables extends React.Component{
             
         };
         if(!isloaded){
-            return <div>loading...</div>
+            return (
+                <div >
+                    <h2 id="load-heading">Loading...</h2>
+                    <div id="load"></div>
+
+                </div>
+            
+            );
         }
         else{
             return(

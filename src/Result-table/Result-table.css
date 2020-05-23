@@ -13,6 +13,25 @@
 
 }
 
+/* loading screen */
+#load{
+    margin-left:700px;
+    margin-top:100px;
+    margin-bottom: 700px;
+    width: 100px;
+    height: 100px;
+    background: rgb(3, 178, 201);
+    position: relative;
+    animation: mymove 2s infinite;
+    border-radius:10px;
+}
+#load-heading{
+    text-align: center;
+}
+@keyframes mymove {
+    from {transoform: rotate(0deg);}
+    to {transform : rotate(360deg);}
+}
 
 @media screen and (max-width: 600px){
     #total-cases{
@@ -39,5 +58,24 @@
     #district-info{
         margin-left: 84px;
 
+    }
+    #load{
+        margin-left:220px;
+        margin-top:100px;
+        margin-bottom: 1500px;
+        width: 100px;
+        height: 100px;
+        background:rgb(3, 178, 201);
+        position: relative;
+        animation: mymove 2s infinite;
+        border-radius:10px;
+    }
+    #load-heading{
+        text-align: center;
+        margin-left: 180px;;
+    }
+    @keyframes mymove {
+        from {transoform: rotate(0deg);}
+        to {transform : rotate(360deg);}
     }
 }
