@@ -64,7 +64,7 @@ class Tables extends React.Component{
         const table=[];
         for(let i=0;i<items.length;i++){
             table.push(<tr id={items[i].statecode}>
-                <td className="state-table" id={"100-"+i}>
+                <td className="state-table state-animation" id={"100-"+i}>
                 <Accordion defaultActiveKey="1">
                     <Card>
                         <Card.Header>
@@ -127,7 +127,7 @@ class Tables extends React.Component{
                 
                     <Container id="table" >
                         <h3 id="tot-cases-heading">Total cases in India</h3>
-                        <table className="table table-bordered" id="total-cases" >
+                        <table className="table table-bordered table-condensed" id="total-cases" >
                             <thead>
                                 <tr>
                                     <th> Cases</th>

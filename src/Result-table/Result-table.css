@@ -32,6 +32,17 @@
     from {transoform: rotate(0deg);}
     to {transform : rotate(360deg);}
 }
+.state-animation{
+    padding:0px;
+    transition: padding 0.5s
+}
+.state-animation:hover{
+    padding: 30px;
+}
+@keyframes statem {
+    from {padding:0px ;}
+    to{padding:20px;}
+}
 
 @media screen and (max-width: 600px){
     #total-cases{
@@ -42,6 +53,7 @@
     
     #state-table{
         margin-right: 10px;
+        
     }
     #tot-cases-heading{
         text-align: center;
@@ -78,4 +90,5 @@
         from {transoform: rotate(0deg);}
         to {transform : rotate(360deg);}
     }
+    
 }
