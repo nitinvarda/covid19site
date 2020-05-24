@@ -28,6 +28,7 @@
 #load-heading{
     text-align: center;
 }
+/* loading screen animation */
 @keyframes mymove {
     from {transoform: rotate(0deg);}
     to {transform : rotate(360deg);}
