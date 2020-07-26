@@ -1,22 +1,35 @@
 import React from 'react';
-import Navbar from 'react-bootstrap/Navbar'; //we are using a react-bootstrap api for importing 'navbar' directly 
-import Nav from 'react-bootstrap/Nav';  // we are using a react-bootstrap api for importing 'nav' directly
+import { Link } from "react-router-dom";
 
 
-const NavBar = ()=>{
-    return(
-        // using bootstrap 4 created a navbar component directly with the brand and reference links
-        <Navbar bg="dark" variant="dark" expand="lg" fixed="top">
-            <Navbar.Brand href="#home" >Covid19india</Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav" className="mr-auto justify-content-end">
-                <Nav variant="pills">
-                    <Nav.Link href="#table"  >Home</Nav.Link>
-                    <Nav.Link href="#helpline-heading" >Helpline</Nav.Link>
-                    <Nav.Link href="#safety" >Measures</Nav.Link>     
-                </Nav>
-            </Navbar.Collapse>
-        </Navbar>
+
+const NavBar = () => {
+    return (
+        <nav className="navbar navbar-expand-md bg-dark navbar-dark fixed-top" >
+
+            <a className="navbar-brand"><Link to="/" style={{ color: "white" }}>Covid19-India</Link></a>
+
+
+            <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                <span className="navbar-toggler-icon"></span>
+            </button>
+
+
+            <div className="collapse navbar-collapse justify-content-end" id="collapsibleNavbar">
+                <ul className="navbar-nav ">
+                    <li className="nav-item">
+                        <a className="nav-link"><Link to="/" style={{ color: "white" }}>Home</Link></a>
+                    </li>
+                    <li className="nav-item">
+                        <a className="nav-link" ><Link to="/helpline" style={{ color: "white" }}>Helpline Numbers</Link></a>
+                    </li>
+                    <li className="nav-item">
+                        <a className="nav-link" ><Link to="/safety-measures" style={{ color: "white" }}>Safety Measures</Link></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
     );
 }
 

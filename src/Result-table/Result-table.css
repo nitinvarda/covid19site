@@ -1,23 +1,55 @@
-#tot-cases-heading{
+/* #tot-cases-heading{
     text-align: center;
-    /* margin-left: 127px; */
+    
 }
 #state-table-heading{
     text-align: center;
-    /* margin-left: 127px; */
+    
 
 }
 #district-info{
     text-align: center;
     margin-left: 138px;
 
+} */
+
+
+
+#table{
+    padding-top: 80px;
+    /* margin: auto; */
+    /* max-width: 400px; */
+    width: 100%;
+    /* background-color: grey; */
+    
+}
+#total-cases{
+    width: 100%;
+    margin: auto;
+    padding:0;
+    
+}
+#state-table{
+    /* background-color: grey; */
+    width: 100%;
+    margin: auto;
+   
 }
 
+
+
+
+
 /* loading screen */
+.loading{
+    margin-top: 200px;
+    padding-bottom: 800px;
+
+}
 #load{
-    margin-left:700px;
-    margin-top:100px;
-    margin-bottom: 700px;
+    margin:auto;
+    
+    
     width: 100px;
     height: 100px;
     background: rgb(3, 178, 201);
@@ -27,27 +59,20 @@
 }
 #load-heading{
     text-align: center;
+    padding-bottom: 50px;
 }
 /* loading screen animation */
 @keyframes mymove {
     from {transoform: rotate(0deg);}
     to {transform : rotate(360deg);}
 }
-.state-animation{
-    padding:0px;
-    transition: padding 0.5s
-}
-.state-animation:hover{
-    padding: 30px;
-}
-@keyframes statem {
-    from {padding:0px ;}
-    to{padding:20px;}
-}
 
-@media screen and (max-width: 600px){
+
+
+/* @media screen and (max-width: 600px){
     #total-cases{
-        margin-left: 78px;
+       width: 80%;
+       margin: auto;
         
         
     }
@@ -60,7 +85,7 @@
         text-align: center;
         margin-left: 91px;
         margin-right: -61px ;
-        /* background-color: blue; */
+       
         
     }
     #state-table-heading{
@@ -92,4 +117,4 @@
         to {transform : rotate(360deg);}
     }
     
-}
+} */
