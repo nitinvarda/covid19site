@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
     return (
@@ -6,8 +7,8 @@ const Footer = () => {
         <footer class="page-footer font-small blue" style={{ backgroundColor: "black" }}>
 
 
-            <div class="footer-copyright text-center py-3" style={{ color: "white" }}>© 2020 Copyright:
-                <a href="https://express-react-trendinit.herokuapp.com/"> Trendinit</a>
+            <div class="footer-copyright text-center py-3" style={{ color: "white" }}>
+                <a href="/" style={{ color: "White" }}>Covid19-India</a>
             </div>
 
 
