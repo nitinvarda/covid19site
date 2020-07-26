@@ -1,12 +1,11 @@
 import React from 'react';
 import './Result-table.css';
-// import DropdownButton from 'react-bootstrap/DropdownButton';
-// import Dropdown from 'react-bootstrap/Dropdown';
+
 import Accordion from 'react-bootstrap/Accordion';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
-import Container from 'react-bootstrap/Container';
+
 
 
 

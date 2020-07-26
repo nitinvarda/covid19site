@@ -7,7 +7,7 @@ const NavBar = () => {
     return (
         <nav className="navbar navbar-expand-md bg-dark navbar-dark fixed-top" >
 
-            <a className="navbar-brand"><Link to="/" style={{ color: "white" }}>Covid19-India</Link></a>
+            <Link className="navbar-brand" to="/" style={{ color: "white" }}>Covid19-India</Link>
 
 
             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
@@ -18,13 +18,13 @@ const NavBar = () => {
             <div className="collapse navbar-collapse justify-content-end" id="collapsibleNavbar">
                 <ul className="navbar-nav ">
                     <li className="nav-item">
-                        <a className="nav-link"><Link to="/" style={{ color: "white" }}>Home</Link></a>
+                        <Link className="nav-link" to="/" style={{ color: "white" }}>Home</Link>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link" ><Link to="/helpline" style={{ color: "white" }}>Helpline Numbers</Link></a>
+                        <Link className="nav-link" to="/helpline" style={{ color: "white" }}>Helpline Numbers</Link>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link" ><Link to="/safety-measures" style={{ color: "white" }}>Safety Measures</Link></a>
+                        <Link className="nav-link" to="/safety-measures" style={{ color: "white" }}>Safety Measures</Link>
                     </li>
                 </ul>
             </div>
