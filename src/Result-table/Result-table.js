@@ -1,10 +1,7 @@
 import React from 'react';
 import './Result-table.css';
 
-import Accordion from 'react-bootstrap/Accordion';
-import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
-import Table from 'react-bootstrap/Table';
+
 
 
 
@@ -48,12 +45,18 @@ class Tables extends React.Component {
         var ActiveCases_india = 0;
         var RecoverdCases_india = 0;
         var DecesedCases_india = 0;
+        var daily_totalCases_india = 0;
+        var daily_recoveredCases_india = 0;
+        var daily_deceasedCases_india = 0;
         for (var i = 0; i < items.length; i++) {
             // below variable are created to store total cases of state
             var totalCases_State = 0;
             var activeCases_State = 0;
             var recoveredCases_State = 0;
             var deceasedCases_State = 0;
+            var daily_totalCases_State = 0;
+            var daily_recoveredCases_State = 0;
+            var daily_deceasedCases_State = 0;
             for (var j = 0; j < items[i].districtData.length; j++) {
                 // so iterating through each states districts data and adding respective values
                 // as  confirmed , active , recovered and deceased to store them as overall state values
@@ -61,6 +64,9 @@ class Tables extends React.Component {
                 activeCases_State = activeCases_State + items[i].districtData[j].active;
                 recoveredCases_State = recoveredCases_State + items[i].districtData[j].recovered;
                 deceasedCases_State = deceasedCases_State + items[i].districtData[j].deceased;
+                daily_totalCases_State = daily_totalCases_State + items[i].districtData[j].delta.confirmed;
+                daily_deceasedCases_State = daily_deceasedCases_State + items[i].districtData[j].delta.deceased;
+                daily_recoveredCases_State = daily_recoveredCases_State + items[i].districtData[j].delta.recovered;
                 // we dont have state data on json file so we are creating a key values [active , recovered ,deceased ,confirmed]
                 // and storing the above genrated values
                 items[i].active = activeCases_State;
@@ -68,6 +74,10 @@ class Tables extends React.Component {
                 items[i].deceased = deceasedCases_State;
                 // items[i].totalCases= totalCases;
                 items[i].confirmed = totalCases_State;
+                items[i].newTotalCases = daily_totalCases_State;
+                items[i].newDeceasedCases = daily_deceasedCases_State;
+                items[i].newRecoveredCases = daily_recoveredCases_State;
+
 
 
             }
@@ -76,6 +86,9 @@ class Tables extends React.Component {
             ActiveCases_india = ActiveCases_india + items[i].active;
             RecoverdCases_india = RecoverdCases_india + items[i].recovered;
             DecesedCases_india = DecesedCases_india + items[i].deceased;
+            daily_totalCases_india = daily_totalCases_india + items[i].newTotalCases;
+            daily_recoveredCases_india = daily_recoveredCases_india + items[i].newRecoveredCases;
+            daily_deceasedCases_india = daily_deceasedCases_india + items[i].newDeceasedCases;
         }
         const table = []; // created a empty array for the result table
         // creating a for loop of length {items.length}
@@ -84,16 +97,15 @@ class Tables extends React.Component {
             table.push(<tr id={items[i].statecode}>
                 <td  >
                     {/* creating an accordion , in simple terms if we click on state name we will get a table containing districts data */}
-                    <Accordion defaultActiveKey="1">
-                        <Card>
-                            <Card.Header>
-                                <Accordion.Toggle as={Button} variant="link" eventKey="0">
-                                    {items[i].state}
-                                </Accordion.Toggle>
-                            </Card.Header>
-                            <Accordion.Collapse eventKey="0">
-                                <Card.Body>
-                                    <Table responsive="sm" >
+                    <div className="accordion" >
+                        <div className="card">
+                            <div className="card-header">
+                                <a className="collapsed" href={"#state-" + items[i].statecode} data-toggle="collapse">{items[i].state}</a>
+
+                            </div>
+                            <div id={"state-" + items[i].statecode} className="collapse" >
+                                <div className="card-body">
+                                    <table className="table"  >
                                         <thead>
                                             <tr >
                                                 <td><b>District</b></td>
@@ -106,26 +118,27 @@ class Tables extends React.Component {
                                         <tbody>
                                             {/* i can't create a nested for loop in middle of JSX elements so " i have used map function of javaScript
                                         which is iterating through "items[i].districtData" which have data of districts , so we get each district as individual item */}
+
                                             {items[i].districtData.map((item, j) => (
                                                 <tr key={j} className={items[i].statecode.toLowerCase()}>
-                                                    <td >{items[i].districtData[j].district}</td>
-                                                    <td >{items[i].districtData[j].confirmed}</td>
-                                                    <td >{items[i].districtData[j].active}</td>
-                                                    <td >{items[i].districtData[j].deceased}</td>
-                                                    <td >{items[i].districtData[j].recovered}</td>
+                                                    <td >{items[i].districtData[j].district} </td>
+                                                    <td ><p>{items[i].districtData[j].confirmed}</p> {items[i].districtData[j].delta.confirmed > 0 ? <p style={{ color: "blue" }}> &uarr;{items[i].districtData[j].delta.confirmed}</p> : ""}</td>
+                                                    <td ><p>{items[i].districtData[j].active}</p> </td>
+                                                    <td ><p>{items[i].districtData[j].deceased}</p> {items[i].districtData[j].delta.deceased > 0 ? <p style={{ color: "red" }}> &uarr;{items[i].districtData[j].delta.deceased}</p> : ""}</td>
+                                                    <td ><p>{items[i].districtData[j].recovered}</p> {items[i].districtData[j].delta.recovered > 0 ? <p style={{ color: "#00ff00" }}> &uarr;{items[i].districtData[j].delta.recovered}</p> : ""}</td>
                                                 </tr>
                                             ))}
                                         </tbody>
-                                    </Table>
-                                </Card.Body>
-                            </Accordion.Collapse>
-                        </Card>
-                    </Accordion>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </td>
-                <td  >{items[i].confirmed}</td>
-                <td >{items[i].active}</td>
-                <td  >{items[i].deceased}</td>
-                <td  >{items[i].recovered}</td>
+                <td  >{items[i].confirmed} {items[i].newTotalCases > 0 ? <p style={{ color: "blue" }}>&uarr;{items[i].newTotalCases}</p> : ""}</td>
+                <td ><p>{items[i].active}</p> </td>
+                <td  ><p>{items[i].deceased}</p> {items[i].newDeceasedCases > 0 ? <p style={{ color: "red" }}>&uarr;{items[i].newDeceasedCases}</p> : ""}</td>
+                <td  ><p>{items[i].recovered}</p> {items[i].newRecoveredCases > 0 ? <p style={{ color: "#006400" }}>&uarr;{items[i].newRecoveredCases}</p> : ""}</td>
 
             </tr>
 
@@ -168,10 +181,10 @@ class Tables extends React.Component {
                                 </thead>
                                 <tbody >
                                     <tr>
-                                        <td>{TotalCases_india}</td>
+                                        <td>{TotalCases_india} {daily_totalCases_india > 0 ? <p style={{ color: "blue" }}>&uarr;{daily_totalCases_india}</p> : ""}</td>
                                         <td>{ActiveCases_india}</td>
-                                        <td>{DecesedCases_india}</td>
-                                        <td>{RecoverdCases_india}</td>
+                                        <td>{DecesedCases_india} {daily_deceasedCases_india > 0 ? <p style={{ color: "red" }}>&uarr;{daily_deceasedCases_india}</p> : ""}</td>
+                                        <td>{RecoverdCases_india} {daily_recoveredCases_india > 0 ? <p style={{ color: "#006400" }}>&uarr;{daily_recoveredCases_india}</p> : ""}</td>
                                     </tr>
 
                                 </tbody>
