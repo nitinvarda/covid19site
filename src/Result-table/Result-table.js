@@ -1,6 +1,7 @@
 import React from 'react';
 import './Result-table.css';
-
+import {VictoryBar, VictoryChart,VictoryLabel,VictoryAxis,VictoryContainer} from 'victory'
+import {ResponsiveContainer,BarChart,Bar,XAxis,YAxis,Tooltip,Legend} from 'recharts'
 
 
 
@@ -26,12 +27,68 @@ class Tables extends React.Component {
             .then(dat => {
                 this.setState({
                     items: [...dat],
-                    isloaded: true
+                    isloaded: true,
+                    defaultGraph:'total'
                 })
 
             });
 
 
+    }
+
+
+    renderGraph=(name,data)=>{
+        switch(name){
+            case 'total':
+                return(
+                    <ResponsiveContainer width="100%" height="100%">
+                        <BarChart width={150} height={40} data={data}>
+                        <XAxis label={{value:'states',position:'insideBottom', offset: -5}} dataKey="state" />
+                        <YAxis tickFormatter={(label)=>`${label/1000}k`} />
+                        <Tooltip  />
+                        <Bar dataKey="total" fill="#8884d8"  />
+                        </BarChart>
+                    </ResponsiveContainer>
+
+                )
+            case 'deceased' :
+                return(
+                    <ResponsiveContainer width="100%" height="100%">
+                        <BarChart width={150} height={40} data={data}>
+                        <XAxis dataKey="state" />
+                        <YAxis tickFormatter={(label)=>`${label/1000}k`} />
+                        <Tooltip />
+                        <Bar dataKey="deceased" fill="#8884d8"  />
+                        </BarChart>
+                    </ResponsiveContainer>
+                )
+            case 'active':
+                return(
+                    <ResponsiveContainer width="100%" height="100%">
+                        <BarChart width={150} height={40} data={data}>
+                        <XAxis dataKey="state" />
+                        <YAxis tickFormatter={(label)=>`${label/1000}k`} />
+                        <Tooltip />
+                        <Bar dataKey="active" fill="#8884d8"  />
+                        </BarChart>
+                    </ResponsiveContainer>
+
+                )
+            case 'recovered':{
+                
+                return (
+                    <ResponsiveContainer width="100%" height="100%">
+                        <BarChart width={150} height={40} data={data}>
+                        <XAxis dataKey="state" />
+                        <YAxis tickFormatter={(label)=>`${label/1000}k`} />
+                        <Tooltip />
+                        <Bar dataKey="recovered" fill="#8884d8"  />
+                        </BarChart>
+                    </ResponsiveContainer>
+
+                )
+            }
+        }
     }
 
     render() {
@@ -41,6 +98,8 @@ class Tables extends React.Component {
         // so adding all districts will give total state values and adding all state values gives overall country result
 
         //below variables are created to store values of total country
+   
+        var statesTotalNumber = []
         var TotalCases_india = 0;
         var ActiveCases_india = 0;
         var RecoverdCases_india = 0;
@@ -67,6 +126,9 @@ class Tables extends React.Component {
                 daily_totalCases_State = daily_totalCases_State + items[i].districtData[j].delta.confirmed;
                 daily_deceasedCases_State = daily_deceasedCases_State + items[i].districtData[j].delta.deceased;
                 daily_recoveredCases_State = daily_recoveredCases_State + items[i].districtData[j].delta.recovered;
+
+
+              
                 // we dont have state data on json file so we are creating a key values [active , recovered ,deceased ,confirmed]
                 // and storing the above genrated values
                 items[i].active = activeCases_State;
@@ -81,6 +143,13 @@ class Tables extends React.Component {
 
 
             }
+            statesTotalNumber.push({
+                state:items[i].statecode,
+                total:items[i].confirmed,
+                active:items[i].active,
+                recovered:items[i].recovered,
+                deceased:items[i].deceased
+            })
             // adding all the states form the above and generating values for total country
             TotalCases_india = TotalCases_india + items[i].confirmed;
             ActiveCases_india = ActiveCases_india + items[i].active;
@@ -90,6 +159,8 @@ class Tables extends React.Component {
             daily_recoveredCases_india = daily_recoveredCases_india + items[i].newRecoveredCases;
             daily_deceasedCases_india = daily_deceasedCases_india + items[i].newDeceasedCases;
         }
+
+        
         const table = []; // created a empty array for the result table
         // creating a for loop of length {items.length}
         for (let i = 0; i < items.length; i++) {
@@ -163,8 +234,8 @@ class Tables extends React.Component {
                 // creating a bootstrap container for placing all the elements in center
                 // imported this contianer component 
                 <React.Fragment>
-
-                    <div id="table" >
+                    
+                    <div id=" table " >
                         <h3 style={{ textAlign: "center" }}>Total cases in India</h3>
 
                         <div className="table-responsive">
@@ -191,8 +262,70 @@ class Tables extends React.Component {
                             </table>
                         </div>
 
-
                     </div>
+                    {/* <div className="col-sm-12">
+                        <VictoryChart 
+                        domainPadding={20}
+                       
+                        
+                        >
+                            <VictoryAxis  />
+                            <VictoryAxis dependentAxis  fixLabelOverlap />
+                            <VictoryBar
+                            height={800}
+                            horizontal
+                            animate={{
+                                duration: 2000,
+                                onLoad: { duration: 1000 }
+                              }}
+                            style={{
+                                labels:{
+                                    fontSize:5,
+                                    
+                                }
+                            }}
+                            alignment="middle"
+                            labels={({ datum }) => datum.activeCases}
+                            
+                            barRatio={0.5}
+                            fixLabelOverlap 
+                            
+                            data={statesTotalNumber}
+                            x='state'
+                            y='totalCases'
+                            y0={10}
+                            width={1200}
+                            
+                            containerComponent={<VictoryContainer responsive={false}/>}
+
+
+                            />
+                        </VictoryChart>
+
+                    </div> */}
+                    <div className='col-sm-8 my-5' style={{display:'flex',flexDirection:'row',justifyContent:'space-around'}}>
+                        <button className={`btn ${this.state.defaultGraph=='total' ? 'btn-primary' : 'btn-secondary'}`}  onClick={()=>this.setState({...this.state,defaultGraph:'total'})}>Total</button>
+                        <button className={`btn ${this.state.defaultGraph=='active' ? 'btn-primary' : 'btn-secondary'}`}  onClick={()=>this.setState({...this.state,defaultGraph:'active'})}>Active</button>
+                        <button className={`btn ${this.state.defaultGraph=='deceased' ? 'btn-primary' : 'btn-secondary'}`}  onClick={()=>this.setState({...this.state,defaultGraph:'deceased'})}>Deceased</button>
+                        <button className={`btn ${this.state.defaultGraph=='recovered' ? 'btn-primary' : 'btn-secondary'}`}  onClick={()=>this.setState({...this.state,defaultGraph:'recovered'})}>Recovered</button>
+                        
+                    </div>
+                    <div className='col-sm-12' style={{height:'50vh',width:'100%'}}>
+                        {this.renderGraph(this.state.defaultGraph,statesTotalNumber)}
+                    {/* <ResponsiveContainer width="100%" height="100%">
+                        <BarChart width={150} height={40} data={statesTotalNumber}>
+                        <XAxis dataKey="state" />
+                        <YAxis />
+                        <Tooltip />
+                        <Bar dataKey="deceased" fill="#8884d8"  />
+                        </BarChart>
+                    </ResponsiveContainer> */}
+                    </div>
+                   
+                   
+
+
+                  
                     <br />
                     <h3 style={{ textAlign: "center" }}>Cases State wise</h3>
                     <p style={{ textAlign: "center" }}>*click on state to see district info</p>
