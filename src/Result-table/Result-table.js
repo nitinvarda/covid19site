@@ -1,7 +1,7 @@
 import React from 'react';
 import './Result-table.css';
-import {VictoryBar, VictoryChart,VictoryLabel,VictoryAxis,VictoryContainer} from 'victory'
-import {ResponsiveContainer,BarChart,Bar,XAxis,YAxis,Tooltip,Legend} from 'recharts'
+// import {VictoryBar, VictoryChart,VictoryLabel,VictoryAxis,VictoryContainer} from 'victory'
+import {ResponsiveContainer,BarChart,Bar,XAxis,YAxis,Tooltip} from 'recharts'
 
 
 
@@ -88,6 +88,8 @@ class Tables extends React.Component {
 
                 )
             }
+            default:
+                return 
         }
     }
 
@@ -304,10 +306,10 @@ class Tables extends React.Component {
 
                     </div> */}
                     <div className='col-sm-8 my-5' style={{display:'flex',flexDirection:'row',justifyContent:'space-around'}}>
-                        <button className={`btn ${this.state.defaultGraph=='total' ? 'btn-primary' : 'btn-secondary'}`}  onClick={()=>this.setState({...this.state,defaultGraph:'total'})}>Total</button>
-                        <button className={`btn ${this.state.defaultGraph=='active' ? 'btn-primary' : 'btn-secondary'}`}  onClick={()=>this.setState({...this.state,defaultGraph:'active'})}>Active</button>
-                        <button className={`btn ${this.state.defaultGraph=='deceased' ? 'btn-primary' : 'btn-secondary'}`}  onClick={()=>this.setState({...this.state,defaultGraph:'deceased'})}>Deceased</button>
-                        <button className={`btn ${this.state.defaultGraph=='recovered' ? 'btn-primary' : 'btn-secondary'}`}  onClick={()=>this.setState({...this.state,defaultGraph:'recovered'})}>Recovered</button>
+                        <button className={`btn ${this.state.defaultGraph==='total' ? 'btn-primary' : 'btn-secondary'}`}  onClick={()=>this.setState({...this.state,defaultGraph:'total'})}>Total</button>
+                        <button className={`btn ${this.state.defaultGraph==='active' ? 'btn-primary' : 'btn-secondary'}`}  onClick={()=>this.setState({...this.state,defaultGraph:'active'})}>Active</button>
+                        <button className={`btn ${this.state.defaultGraph==='deceased' ? 'btn-primary' : 'btn-secondary'}`}  onClick={()=>this.setState({...this.state,defaultGraph:'deceased'})}>Deceased</button>
+                        <button className={`btn ${this.state.defaultGraph==='recovered' ? 'btn-primary' : 'btn-secondary'}`}  onClick={()=>this.setState({...this.state,defaultGraph:'recovered'})}>Recovered</button>
                         
                     </div>
                     <div className='col-sm-12' style={{height:'50vh',width:'100%'}}>
