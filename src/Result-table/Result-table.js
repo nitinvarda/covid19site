@@ -2,7 +2,8 @@ import React from 'react';
 import './Result-table.css';
 // import {VictoryBar, VictoryChart,VictoryLabel,VictoryAxis,VictoryContainer} from 'victory'
 import {ResponsiveContainer,BarChart,Bar,XAxis,YAxis,Tooltip} from 'recharts'
-
+import axios from 'axios'
+import { STATE_NAMES } from '../CONSTANTS';
 
 
 
@@ -13,7 +14,9 @@ class Tables extends React.Component {
         super(props);
         this.state = {
             isloaded: false, //we are initializing the state as isloaded=false and items =['']
-            items: []
+            items: [],
+            covidData:[],
+            defaultGraph:'total'
 
         };
     };
@@ -22,16 +25,23 @@ class Tables extends React.Component {
     // we are fetching the data through an api call ,
     //after receving the data changing seting the state values as isloaded=true and items=[...dat] contain json data of results
     componentDidMount() {
-        fetch("https://api.covid19india.org/v2/state_district_wise.json")
-            .then((response) => { return response.json() })
-            .then(dat => {
-                this.setState({
-                    items: [...dat],
-                    isloaded: true,
-                    defaultGraph:'total'
-                })
+        axios.get("https://data.covid19india.org/v4/min/data.min.json").then((result)=>{
+            this.setState({
+                covidData:result.data,
+                isloaded:true,
+                
+            })
+        }).catch(err=>console.log(err))
+        // fetch("https://api.covid19india.org/v2/state_district_wise.json")
+        //     .then((response) => { return response.json() })
+        //     .then(dat => {
+        //         this.setState({
+        //             items: [...dat],
+        //             isloaded: true,
+        //             defaultGraph:'total'
+        //         })
 
-            });
+        //     });
 
 
     }
@@ -94,6 +104,9 @@ class Tables extends React.Component {
     }
 
     render() {
+        console.log(this.state)
+       
+        console.log([...Array(Object.keys(this.state.covidData).length).keys()])
         // we are assigning the state values to var so that we can use them directly with names, if not we need to call them as this.state.items or this.state.isloaded
         var { isloaded, items } = this.state;
         // the json file of indian covid19 info have state and district info but there is no mentioned "data of overall cases of state or country"
@@ -162,12 +175,14 @@ class Tables extends React.Component {
             daily_deceasedCases_india = daily_deceasedCases_india + items[i].newDeceasedCases;
         }
 
+        console.log(statesTotalNumber)
         
         const table = []; // created a empty array for the result table
         // creating a for loop of length {items.length}
         for (let i = 0; i < items.length; i++) {
             //pushing the data to table variable created above 
-            table.push(<tr id={items[i].statecode}>
+            table.push(
+                <tr id={items[i].statecode}>
                 <td  >
                     {/* creating an accordion , in simple terms if we click on state name we will get a table containing districts data */}
                     <div className="accordion" >
@@ -232,6 +247,10 @@ class Tables extends React.Component {
             );
         }
         else {
+            const {
+                total:{confirmed:totalConfirmed,deceased:totalDeceased,recovered:totalRecovered},
+                delta:{confirmed:newTotalConfirmed,deceased:newTotalDeceased,recovered:newTotalRecovered}
+            } = this.state.covidData['TT']
             return (
                 // creating a bootstrap container for placing all the elements in center
                 // imported this contianer component 
@@ -254,10 +273,10 @@ class Tables extends React.Component {
                                 </thead>
                                 <tbody >
                                     <tr>
-                                        <td>{TotalCases_india} {daily_totalCases_india > 0 ? <p style={{ color: "blue" }}>&uarr;{daily_totalCases_india}</p> : ""}</td>
-                                        <td>{ActiveCases_india}</td>
-                                        <td>{DecesedCases_india} {daily_deceasedCases_india > 0 ? <p style={{ color: "red" }}>&uarr;{daily_deceasedCases_india}</p> : ""}</td>
-                                        <td>{RecoverdCases_india} {daily_recoveredCases_india > 0 ? <p style={{ color: "#006400" }}>&uarr;{daily_recoveredCases_india}</p> : ""}</td>
+                                        <td>{totalConfirmed} {newTotalConfirmed > 0 ? <p style={{ color: "blue" }}>&uarr;{newTotalConfirmed}</p> : ""}</td>
+                                        <td>{totalConfirmed-totalRecovered-totalDeceased}</td>
+                                        <td>{totalDeceased} {newTotalDeceased > 0 ? <p style={{ color: "red" }}>&uarr;{newTotalDeceased}</p> : ""}</td>
+                                        <td>{totalRecovered} {newTotalRecovered > 0 ? <p style={{ color: "#006400" }}>&uarr;{newTotalRecovered}</p> : ""}</td>
                                     </tr>
 
                                 </tbody>
@@ -305,7 +324,7 @@ class Tables extends React.Component {
                         </VictoryChart>
 
                     </div> */}
-                    <div className='col-sm-8 my-5' style={{display:'flex',flexDirection:'row',justifyContent:'space-around'}}>
+                    {/* <div className='col-sm-8 my-5' style={{display:'flex',flexDirection:'row',justifyContent:'space-around'}}>
                         <button className={`btn ${this.state.defaultGraph==='total' ? 'btn-primary' : 'btn-secondary'}`}  onClick={()=>this.setState({...this.state,defaultGraph:'total'})}>Total</button>
                         <button className={`btn ${this.state.defaultGraph==='active' ? 'btn-primary' : 'btn-secondary'}`}  onClick={()=>this.setState({...this.state,defaultGraph:'active'})}>Active</button>
                         <button className={`btn ${this.state.defaultGraph==='deceased' ? 'btn-primary' : 'btn-secondary'}`}  onClick={()=>this.setState({...this.state,defaultGraph:'deceased'})}>Deceased</button>
@@ -313,7 +332,7 @@ class Tables extends React.Component {
                         
                     </div>
                     <div className='col-sm-12' style={{height:'50vh',width:'100%'}}>
-                        {this.renderGraph(this.state.defaultGraph,statesTotalNumber)}
+                        {this.renderGraph(this.state.defaultGraph,)}
                     {/* <ResponsiveContainer width="100%" height="100%">
                         <BarChart width={150} height={40} data={statesTotalNumber}>
                         <XAxis dataKey="state" />
@@ -321,8 +340,8 @@ class Tables extends React.Component {
                         <Tooltip />
                         <Bar dataKey="deceased" fill="#8884d8"  />
                         </BarChart>
-                    </ResponsiveContainer> */}
-                    </div>
+                    </ResponsiveContainer> 
+                    </div> */}
                    
                    
 
@@ -347,10 +366,83 @@ class Tables extends React.Component {
                                 </tr>
                             </thead>
                             <tbody>
-                                {table}
+                                {Object.keys(this.state.covidData).length > 0 && Object.keys(this.state.covidData).map((data)=>{
+                             
+                                const {
+                                    total:{confirmed,deceased,recovered},
+                                    delta:{confirmed:newConfirmed,deceased:newDeceased,recovered:newRecovered},
+                                    districts={}
+                                } = this.state.covidData[data]
+                                
+                                if(data !== 'TT'){
+
+                                
+                                    return(
+                                        <tr key={data} >
+                                            <td  >
+                                                
+                                                <div className="accordion" >
+                                                    <div className="card">
+                                                        <div className="card-header">
+                                                            <a className="collapsed" href={"#state-" + data} data-toggle="collapse">{STATE_NAMES[data]}</a>
+                            
+                                                        </div>
+                                                        <div id={"state-" + data}  className="collapse" >
+                                                            <div className="card-body">
+                                                                <table className="table"  >
+                                                                    <thead>
+                                                                        <tr >
+                                                                            <td><b>District</b></td>
+                                                                            <td><b>Total Cases</b></td>
+                                                                            <td><b>Active Cases</b></td>
+                                                                            <td><b>Decesed</b></td>
+                                                                            <td><b>Recoverd</b></td>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        
+                                                                    
+                        
+                                                                        {Object.keys(districts).map((district) => {
+                                                                            const {
+                                                                                total:{confirmed:districtConfirmed,deceased:districtDeceased,recovered:districtRecovered} = {},
+                                                                            } = districts[district]
+                                                                            // console.log(districts[district],district)
+                                                                                // console.log(Number.isNaN(districtConfirmed-districtRecovered-districtDeceased),district)
+                                                                                return(
+                                                                                    <tr key={district} >
+                                                                                        <td >{district} </td>
+                                                                                        <td ><p>{districtConfirmed}</p> {districts[district]?.delta?.confirmed > 0 ? <p style={{ color: "blue" }}> &uarr;{districts[district]?.delta?.confirmed}</p> : ""}</td>
+                                                                                        <td ><p>{Number.isNaN(districtConfirmed-districtRecovered-districtDeceased) ? '-' : districtConfirmed-districtRecovered-districtDeceased}</p> </td>
+                                                                                        <td ><p>{districtDeceased}</p> {districts[district]?.delta?.deceased > 0 ? <p style={{ color: "red" }}> &uarr;{districts[district]?.delta?.deceased}</p> : ""}</td>
+                                                                                        <td ><p>{districtRecovered}</p> {districts[district]?.delta?.recovered > 0 ? <p style={{ color: "#00ff00" }}> &uarr;{districts[district]?.delta?.recovered}</p> : ""}</td>
+                                                                                    </tr>
+                                                                                )
+                                                                            
+                                                                    })}  
+                                                                    
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td> 
+                                            <td  >{confirmed} {newConfirmed > 0 ? <p style={{ color: "blue" }}>&uarr;{newConfirmed}</p> : ""}</td>
+                                            <td ><p>{confirmed-recovered-deceased}</p> </td>
+                                            <td  ><p>{deceased}</p> {newDeceased > 0 ? <p style={{ color: "red" }}>&uarr;{newDeceased}</p> : ""}</td>
+                                            <td  ><p>{recovered}</p> {newRecovered > 0 ? <p style={{ color: "#006400" }}>&uarr;{newRecovered}</p> : ""}</td>
+                        
+                                        </tr>
+                                    )
+                                }
+                            })}
                             </tbody>
 
                         </table>
+                    </div>
+                    <div>
+                        
                     </div>
 
 
