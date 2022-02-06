@@ -366,6 +366,7 @@ class Tables extends React.Component {
                                 </tr>
                             </thead>
                             <tbody>
+                                 {/* eslint-disable-next-line */}
                                 {Object.keys(this.state.covidData).length > 0 && Object.keys(this.state.covidData).map((data)=>{
                              
                                 const {
